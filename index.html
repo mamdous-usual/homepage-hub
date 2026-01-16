@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Beautiful countdown to New Year with todo list and Pomodoro timer. Stay productive and track time until the new year!">
+  <meta name="keywords" content="new year countdown, productivity, todo list, pomodoro timer, countdown timer">
+  <meta name="author" content="Your Name">
+  
+  <!-- Open Graph / Social Media -->
+  <meta property="og:title" content="New Year Countdown & Productivity">
+  <meta property="og:description" content="Beautiful countdown to New Year with todo list and Pomodoro timer">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="/og-image.png">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  <title>New Year Countdown & Productivity</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+      <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+      <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+
+    <!-- Current Time -->
+    <div class="current-time" id="currentTime"></div>
+    <div class="current-date" id="currentDate"></div>
+
+    <!-- Countdown Section -->
+    <div class="countdown-section">
+      <h1 class="countdown-title">Countdown to <span id="nextYear"></span></h1>
+      <div class="countdown-container">
+        <div class="countdown-item">
+          <div class="countdown-value" id="months">00</div>
+          <div class="countdown-label">Months</div>
+        </div>
+        <div class="countdown-separator">:</div>
+        <div class="countdown-item">
+          <div class="countdown-value" id="days">00</div>
+          <div class="countdown-label">Days</div>
+        </div>
+        <div class="countdown-separator">:</div>
+        <div class="countdown-item">
+          <div class="countdown-value" id="hours">00</div>
+          <div class="countdown-label">Hours</div>
+        </div>
+        <div class="countdown-separator">:</div>
+        <div class="countdown-item">
+          <div class="countdown-value" id="minutes">00</div>
+          <div class="countdown-label">Minutes</div>
+        </div>
+        <div class="countdown-separator">:</div>
+        <div class="countdown-item">
+          <div class="countdown-value" id="seconds">00</div>
+          <div class="countdown-label">Seconds</div>
+        </div>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="yearProgress"></div>
+      </div>
+      <div class="progress-text" id="progressText">0% of year completed</div>
+    </div>
+
+    <!-- Tools Section -->
+    <div class="tools-section">
+      <!-- Pomodoro Timer -->
+      <div class="tool-card pomodoro-card">
+        <h2 class="tool-title">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          Pomodoro Timer
+        </h2>
+        <div class="pomodoro-display" id="pomodoroDisplay">25:00</div>
+        <div class="pomodoro-status" id="pomodoroStatus">Ready to focus</div>
+        <div class="pomodoro-controls">
+          <button class="btn btn-primary" id="pomodoroStart">Start</button>
+          <button class="btn btn-secondary" id="pomodoroPause" disabled>Pause</button>
+          <button class="btn btn-danger" id="pomodoroReset">Reset</button>
+        </div>
+        <div class="pomodoro-modes">
+          <button class="mode-btn active" data-mode="work" data-time="25">Work (25m)</button>
+          <button class="mode-btn" data-mode="short" data-time="5">Short Break (5m)</button>
+          <button class="mode-btn" data-mode="long" data-time="15">Long Break (15m)</button>
+        </div>
+        <div class="pomodoro-stats">
+          <span>🍅 Sessions completed: <strong id="pomodoroCount">0</strong></span>
+        </div>
+      </div>
+
+      <!-- Todo List -->
+      <div class="tool-card todo-card">
+        <h2 class="tool-title">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 11l3 3L22 4"></path>
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+          </svg>
+          Todo List
+        </h2>
+        <div class="todo-input-container">
+          <input type="text" id="todoInput" placeholder="Add a new task..." class="todo-input">
+          <button class="btn btn-primary" id="addTodo">Add</button>
+        </div>
+        <div class="todo-filters">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="active">Active</button>
+          <button class="filter-btn" data-filter="completed">Completed</button>
+        </div>
+        <ul class="todo-list" id="todoList"></ul>
+        <div class="todo-footer">
+          <span id="todoCount">0 tasks</span>
+          <button class="btn btn-small btn-danger" id="clearCompleted">Clear Completed</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Greeting Section -->
+    <div class="greeting-section">
+      <div class="greeting" id="greeting"></div>
+      <div class="quote" id="quote"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>Made with ❤️ | <a href="#" id="setAsHome">Set as Homepage</a></p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
