@@ -195,18 +195,43 @@ const Pomodoro = {
     this.loadState();
     this.updateDisplay();
     this.attachEventListeners();
+    // If timer was running before refresh, resume countdown
+    if (this.isRunning) {
+      this.start(true); // true = restoring
+    }
   },
   
   loadState() {
-    const saved = localStorage.getItem('pomodoroSessions');
-    if (saved) {
-      this.sessionsCompleted = parseInt(saved, 10);
+    // Sessions completed
+    const savedSessions = localStorage.getItem('pomodoroSessions');
+    if (savedSessions) {
+      this.sessionsCompleted = parseInt(savedSessions, 10);
       elements.pomodoroCount.textContent = this.sessionsCompleted;
+    }
+    // Timer state
+    const savedState = localStorage.getItem('pomodoroState');
+    if (savedState) {
+      try {
+        const state = JSON.parse(savedState);
+        this.timeLeft = state.timeLeft ?? 25 * 60;
+        this.totalTime = state.totalTime ?? 25 * 60;
+        this.currentMode = state.currentMode ?? 'work';
+        this.isRunning = state.isRunning ?? false;
+      } catch (e) {
+        // Ignore parse errors, use defaults
+      }
     }
   },
   
   saveState() {
     localStorage.setItem('pomodoroSessions', this.sessionsCompleted.toString());
+    // Save timer state
+    localStorage.setItem('pomodoroState', JSON.stringify({
+      timeLeft: this.timeLeft,
+      totalTime: this.totalTime,
+      currentMode: this.currentMode,
+      isRunning: this.isRunning
+    }));
   },
   
   attachEventListeners() {
@@ -235,19 +260,19 @@ const Pomodoro = {
     this.updateDisplay();
     this.updateButtons(false);
     this.updateStatus();
+    this.saveState();
   },
   
-  start() {
-    if (this.isRunning) return;
-    
+  start(restoring = false) {
+    if (this.isRunning && !restoring) return;
     this.isRunning = true;
     this.updateButtons(true);
     this.updateStatus();
-    
+    this.saveState();
     this.interval = setInterval(() => {
       this.timeLeft--;
       this.updateDisplay();
-      
+      this.saveState();
       if (this.timeLeft <= 0) {
         this.complete();
       }
@@ -259,30 +284,28 @@ const Pomodoro = {
     clearInterval(this.interval);
     this.updateButtons(false);
     elements.pomodoroStatus.textContent = 'Paused';
+    this.saveState();
   },
   
   reset() {
     this.isRunning = false;
     clearInterval(this.interval);
-    
     const activeBtn = document.querySelector('.mode-btn.active');
     const time = parseInt(activeBtn.dataset.time, 10);
     this.timeLeft = time * 60;
     this.totalTime = time * 60;
-    
     this.updateDisplay();
     this.updateButtons(false);
     this.updateStatus();
+    this.saveState();
   },
   
   complete() {
     this.isRunning = false;
     clearInterval(this.interval);
-    
     if (this.currentMode === 'work') {
       this.sessionsCompleted++;
       elements.pomodoroCount.textContent = this.sessionsCompleted;
-      this.saveState();
       showNotification('🍅 Great work! Time for a break.', 'success');
       this.playSound();
       this.sendBrowserNotification('Pomodoro Complete!', 'Great work! Time for a break.');
@@ -291,9 +314,9 @@ const Pomodoro = {
       this.playSound();
       this.sendBrowserNotification('Break Over!', 'Ready to focus?');
     }
-    
     this.updateButtons(false);
     elements.pomodoroStatus.textContent = 'Session completed!';
+    this.saveState();
   },
   
   updateDisplay() {
