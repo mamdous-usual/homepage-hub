@@ -4,7 +4,7 @@ A minimal, Nord-themed new tab dashboard featuring a New Year countdown, todo li
 
 ## 🌐 Live Demo
 
-[View Live Site](https://your-demo-link.com)
+[View Live Site](https://newtab-hub.vercel.app/)
 
 
 ## ❓ Why a Web Page, Not an Extension?
