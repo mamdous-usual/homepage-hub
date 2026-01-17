@@ -9,7 +9,7 @@ A minimal, Nord-themed home page tab dashboard featuring a New Year countdown, t
 
 ## ❓ Why a Web Page, Not an Extension?
 
-I originally planned to release this as a Chrome extension, but publishing to the Chrome Web Store requires a $5 developer fee and additional review steps. By building it as a standalone web page, anyone can use it for free, on any browser, with no installation or account required. Just set it as your new tab for the same experience—no barriers, no cost.
+I originally planned to release this as a Chrome extension, but publishing to the Chrome Web Store requires a $5 developer fee and additional review steps. By building it as a standalone web page, anyone can use it for free, on any browser, with no installation or account required. Just set it as your home page for the same experience—no barriers, no cost. And can also use this as a productivity tool.
 
 ## 📋 About
 
