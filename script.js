@@ -1,5 +1,6 @@
 // =============================================
-// New Year Countdown & Productivity Website
+// Productivity Core
+// Author : Mamdous
 // =============================================
 
 // DOM Elements
